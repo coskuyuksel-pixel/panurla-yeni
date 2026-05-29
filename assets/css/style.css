@@ -703,4 +703,17 @@ section[id], [id] { scroll-margin-top: 96px; }
 
 /* Erişilebilirlik — odak görünür olsun */
 :focus-visible { outline: 3px solid var(--c-wood); outline-offset: 3px; border-radius: 4px; }
+
+/* ------------------ LIGHTBOX (galeri) ------------------ */
+.lightbox { position: fixed; inset: 0; z-index: 300; background: rgba(10,12,10,.93); display: none; align-items: center; justify-content: center; }
+.lightbox.is-open { display: flex; animation: fadeIn 240ms ease both; }
+.lightbox img { max-width: 92vw; max-height: 86vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.6); object-fit: contain; }
+.lightbox__btn { position: absolute; background: rgba(255,255,255,.12); color: #fff; border-radius: 50%; display: grid; place-items: center; transition: background var(--tr-fast), transform var(--tr-fast); z-index: 2; }
+.lightbox__btn:hover { background: var(--c-wood); }
+.lb-close { top: 20px; right: 24px; width: 48px; height: 48px; font-size: 28px; line-height: 1; }
+.lb-prev, .lb-next { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; font-size: 32px; line-height: 1; }
+.lb-prev { left: 20px; } .lb-next { right: 20px; }
+.lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.06); }
+.lb-counter { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: rgba(255,255,255,.8); font-size: var(--fs-xs); letter-spacing: .15em; }
+@media (max-width: 600px) { .lb-prev { left: 8px; } .lb-next { right: 8px; } .lightbox__btn { width: 44px; height: 44px; } .lb-prev, .lb-next { font-size: 26px; } }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

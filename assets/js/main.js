@@ -301,3 +301,59 @@
 
   window.addEventListener("resize", () => { if (canvas.classList.contains("is-on")) resize(); });
 })();
+
+/* Lightbox - galeri gorselleri (index + galeri) */
+(function () {
+  "use strict";
+  const links = Array.from(document.querySelectorAll(".gallery a"));
+  if (!links.length) return;
+  const imgs = links.map(a => a.getAttribute("href")).filter(Boolean);
+  let i = 0, lastFocused = null;
+
+  const lb = document.createElement("div");
+  lb.className = "lightbox";
+  lb.setAttribute("aria-hidden", "true");
+  lb.innerHTML =
+    '<button class="lightbox__btn lb-close" aria-label="Kapat">×</button>' +
+    '<button class="lightbox__btn lb-prev" aria-label="Onceki">‹</button>' +
+    '<img alt="Pan Urla galeri gorseli" />' +
+    '<button class="lightbox__btn lb-next" aria-label="Sonraki">›</button>' +
+    '<div class="lb-counter"></div>';
+  document.body.appendChild(lb);
+
+  const img = lb.querySelector("img");
+  const counter = lb.querySelector(".lb-counter");
+
+  function show(n) {
+    i = (n + imgs.length) % imgs.length;
+    img.src = imgs[i];
+    img.alt = "Pan Urla galeri gorseli " + (i + 1);
+    counter.textContent = (i + 1) + " / " + imgs.length;
+  }
+  function open(n) {
+    lastFocused = document.activeElement;
+    show(n);
+    lb.classList.add("is-open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    lb.querySelector(".lb-close").focus();
+  }
+  function close() {
+    lb.classList.remove("is-open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  links.forEach((a, idx) => a.addEventListener("click", (e) => { e.preventDefault(); open(idx); }));
+  lb.querySelector(".lb-close").addEventListener("click", close);
+  lb.querySelector(".lb-prev").addEventListener("click", (e) => { e.stopPropagation(); show(i - 1); });
+  lb.querySelector(".lb-next").addEventListener("click", (e) => { e.stopPropagation(); show(i + 1); });
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-open")) return;
+    if (e.key === "Escape") close();
+    else if (e.key === "ArrowRight") show(i + 1);
+    else if (e.key === "ArrowLeft") show(i - 1);
+  });
+})();
